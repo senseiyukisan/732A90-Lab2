@@ -4,11 +4,16 @@
 
 # Functional
 min_se <- function(boundaries, par, target_fn){
+  
+  
   interp_fn <- function(boundaries, par) {
-    result = c(boundaries[1] * par[1], par[2] * boundaries[2], (par[3] * boundaries[3]^2))
+    result <- c()
+    for (i in 1:length(boundaries)){
+      result = c(boundaries[i] * par[1], par[2] * boundaries[i], (par[3] * boundaries[i]^2))
+    }
     return(result)
   }
-  
+  print(boundaries)
   sse = sum((target_fn(boundaries) - interp_fn(boundaries, par))^2)
   return(sse)
 }
@@ -36,7 +41,7 @@ SSE <- function(x, a, method1, method2){
 optimiser <- function(x, method){
   aInit <- c(0, 0, 0)
   res <- optim(aInit, SSE, x = x, method1 = method, method2 = interpolator)
-  cat("res$par: ", res$par, "\n", "typeof(res$par): ", typeof(res$par), "\n")
+  # cat("res$par: ", res$par, "\n", "typeof(res$par): ", typeof(res$par), "\n")
   return(res$par)
 }
 
@@ -52,10 +57,13 @@ approximate_cut <- function(n, fn){
   interval_targets = c()
   for (i in 1:length(interval)) {
     first_val = interval[i]
-    second_val = interval[i+1]
-    mid_val = (second_val - first_val) / 2
-    boundaries = c(first_val, mid_val, second_val)
-    interval_targets = append(interval_targets, approximate(boundaries, fn))
+    if (first_val == 1){stop}
+    else{
+      second_val = interval[i+1]
+      mid_val = interval[i] + ((second_val - first_val) / 2)
+      boundaries = c(first_val, mid_val, second_val)
+      interval_targets = append(interval_targets, approximate(boundaries, fn))
+    }
   }
   return(interval_targets)
 }
@@ -65,13 +73,13 @@ approximate_cut <- function(n, fn){
 
 aproximate <- function(n, method){
   scale <- 1/n
-  cat("Scale: ", scale, "\n")
+  # cat("Scale: ", scale, "\n")
   midVal <- scale / 2
-  cat("MidVal: ", midVal, "\n")
+  # cat("MidVal: ", midVal, "\n")
   result <- list()
   for (i in 1:n) {
     x <- c((scale*i)-scale, (scale * i) - midVal, scale * i)
-    cat("x: ", x, "\n")
+    # cat("x: ", x, "\n")
     result <- append(result, list(optimiser(x, method)))
   }
   return(result)
