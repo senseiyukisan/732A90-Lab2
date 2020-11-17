@@ -13,7 +13,7 @@ interp_fn <- function(boundaries, par){
 
 
 min_se <- function(boundaries, par, target_fn){
-
+  
   t_f = target_fn(boundaries)
   i_f = interp_fn(boundaries, par)
   sse = sum((t_f - i_f)^2)
@@ -89,7 +89,6 @@ for (i in 1:length(test)) {
 legend("bottomright", legend=c("f1(x)", "interpolator"), lty=c(NA,1),pch=c(1,NA))
 
 
-
 ################
 ### Martynas ###
 ################
@@ -122,15 +121,15 @@ aproximate <- function(n, method){
   return(result)
 }
 # 
-# x <- seq(0, 1, by = 0.01)
-# plot(x,f_1(x), main="Prediction using piecewise - parabolic interpolator, n = 100", ylab = "y")
-# 
-# test <- aproximate(100, f_1)
-# scale <- 1/length(test)
-# for (i in 1:length(test)) {
-#   x <- seq((scale*i)- scale, scale*i, by = 0.01/length(test))
-#   yint <- sapply(x, interpolator, a = test[[i]])
-#   lines(x,yint)
-# }
-# 
-# legend("bottomright", legend=c("f1(x)", "interpolator"), lty=c(NA,1),pch=c(1,NA))
+x <- seq(0, 1, by = 0.01)
+plot(x,f_1(x), main="Prediction using piecewise - parabolic interpolator, n = 100", ylab = "y")
+
+test <- aproximate(100, f_1)
+scale <- 1/length(test)
+for (i in 1:length(test)) {
+  x <- seq((scale*i)- scale, scale*i, by = 0.01/length(test))
+  yint <- sapply(x, interpolator, a = test[[i]])
+  lines(x,yint)
+}
+
+legend("bottomright", legend=c("f1(x)", "interpolator"), lty=c(NA,1),pch=c(1,NA))
