@@ -82,6 +82,7 @@ cg_2 <- optim(par=c(0, 1), fn=negative_log_likelihood, gr=gradient, method="CG")
 bfgs_2 <- optim(par=c(0, 1), fn=negative_log_likelihood, gr=gradient, method="BFGS")
 ```
 
+There could be issues of underflow if the difference in order of magnitude between the elements that are summed is too big. Maximizing the log-likelihood allows to prevent this issue, because very small and very large values can have comparable contributions to the sum.
 
 ## 4.
 
@@ -105,3 +106,4 @@ set_number_format(pretty_df, 5)
 
 ```
 
+All algorithms converged. The optimal values of parameters are pretty similar to the ones we calculated earlier. We would recommend to use the BFGS algorithm since we observed less computations while getting the same result. 
