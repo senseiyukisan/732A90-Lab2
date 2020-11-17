@@ -3,23 +3,26 @@
 #########
 
 # Functional
+interp_fn <- function(boundaries, par){
+  result <- c()
+  for (i in 1:length(boundaries)){
+    result[i] = c(par[1] + par[2] * boundaries[i] + (par[3] * boundaries[i]^2))
+  }
+  return(result)
+}
+
+
 min_se <- function(boundaries, par, target_fn){
+  
   t_f = target_fn(boundaries)
   i_f = interp_fn(boundaries, par)
   sse = sum((t_f - i_f)^2)
   return(sse)
 }
 
-interp_fn <- function(boundaries, par) {
-  result <- c()
-  for (i in 1:length(boundaries)){
-    result = c(par[1], par[2] * boundaries[i], (par[3] * boundaries[i]^2))
-  }
-  return(result)
-}
 
-approximate <- function(boundaries, target_fn, interp_fn){
-  optimized <- optim(par=c(0,0,0), fn=min_se, target_fn=target_fn, interp_fn=interp_fn, boundaries=boundaries)
+approximate <- function(boundaries, target_fn){
+  optimized <- optim(par=c(0,0,0), fn=min_se, target_fn=target_fn, boundaries=boundaries)
   return(optimized$par)
 }
 
@@ -40,6 +43,7 @@ approximate_cut <- function(n, fn){
       second_val = interval[i+1]
       mid_val = interval[i] + ((second_val - first_val) / 2)
       boundaries = c(first_val, mid_val, second_val)
+      # print(boundaries)
       interval_targets = append(interval_targets, list(approximate(boundaries, fn)))
     }
   }
@@ -62,13 +66,13 @@ f_2 <- function(x) {
   return(y)
 }
 
-interp_fn <- function(boundaries, par) {
-  result <- c()
-  for (i in 1:length(boundaries)){
-    result = c(par[1], par[2] * boundaries[i], (par[3] * boundaries[i]^2))
-  }
-  return(result)
-}
+# interp_fn <- function(boundaries, par) {
+#   result <- c()
+#   for (i in 1:length(boundaries)){
+#     result[i] = c(par[1], par[2] * boundaries[i], (par[3] * boundaries[i]^2))
+#   }
+#   return(result)
+# }
 
 
 x <- seq(0, 1, by = 0.01)
@@ -83,7 +87,6 @@ for (i in 1:length(test)) {
 }
 
 legend("bottomright", legend=c("f1(x)", "interpolator"), lty=c(NA,1),pch=c(1,NA))
-
 
 
 ################
